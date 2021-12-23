@@ -2,6 +2,7 @@ import { LoginPayload, authActions } from './authSlice';
 import { call, delay, fork, put, take } from 'redux-saga/effects';
 
 import { PayloadAction } from '@reduxjs/toolkit';
+import { push } from 'connected-react-router';
 
 function* handleLogin(payload: LoginPayload) {
   try {
@@ -15,6 +16,8 @@ function* handleLogin(payload: LoginPayload) {
         name: 'leader',
       })
     );
+
+    yield put(push('/admin'));
   } catch (err) {
     yield put(authActions.loginFail('login fail'));
   }
@@ -26,13 +29,13 @@ function* handleLogout() {
   yield delay(1000);
   console.log('Handle logout');
   localStorage.removeItem('access_token');
-  // redirect to login page
+  yield put(push('/login'));
 }
 
 function* watchLoginFlow() {
   while (true) {
     const isLoggedIn = Boolean(localStorage.getItem('access_token'));
-    console.log('Watch login', isLoggedIn);
+    console.log('Watch login| IsLoggedIn', isLoggedIn);
 
     if (!isLoggedIn) {
       const action: PayloadAction<LoginPayload> = yield take(authActions.login.type);
