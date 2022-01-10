@@ -21,8 +21,6 @@ function* handleLogin(payload: LoginPayload) {
   } catch (err) {
     yield put(authActions.loginFail('login fail'));
   }
-
-  // todo: redirect to admin page
 }
 
 function* handleLogout() {
