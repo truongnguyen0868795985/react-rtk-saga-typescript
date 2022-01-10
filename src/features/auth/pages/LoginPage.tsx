@@ -2,6 +2,7 @@ import { Box, Button, CircularProgress, Paper, Typography, makeStyles } from '@m
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { authActions } from '../authSlice';
 
 const useStyles = makeStyles((theme) => ({
@@ -20,8 +21,14 @@ const useStyles = makeStyles((theme) => ({
 export const LoginPage = () => {
   const classes = useStyles();
 
+  const isLoggedIn = localStorage.getItem('access_token');
+
   const dispatch = useAppDispatch();
   const isLogging = useAppSelector((state) => state.auth.isLogging);
+
+  if (isLoggedIn) {
+    return <Redirect to="admin" />;
+  }
 
   const handleLoginClick = () => {
     dispatch(
