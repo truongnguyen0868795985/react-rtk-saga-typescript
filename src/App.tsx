@@ -11,6 +11,9 @@ function App() {
         <Route path="/login">
           <LoginPage />
         </Route>
+        <PrivateRoute path="/">
+          <AdminLayout />
+        </PrivateRoute>
         <PrivateRoute path="/admin">
           <AdminLayout />
         </PrivateRoute>
