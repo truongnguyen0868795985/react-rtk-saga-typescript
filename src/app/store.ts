@@ -7,6 +7,7 @@ import createSagaMiddleware from 'redux-saga';
 import dashboardReducer from 'features/dashboard/dashboardSlice';
 import { history } from 'utils';
 import rootSaga from './rootSaga';
+import studentReducer from 'features/student/studentSlice';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   counter: counterReducer,
   dashboard: dashboardReducer,
   auth: authReducer,
+  student: studentReducer,
 });
 
 export const store = configureStore({
