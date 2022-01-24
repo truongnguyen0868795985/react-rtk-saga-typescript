@@ -36,7 +36,7 @@ const studentSlice = createSlice({
       state.pagination = action.payload.pagination;
       state.loading = false;
     },
-    fetchStudentListFailed(state: StudentState, action: PayloadAction<ListParams>) {
+    fetchStudentListFailed(state: StudentState) {
       state.loading = false;
     },
     setFilter(state: StudentState, action: PayloadAction<ListParams>) {
