@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 
 import { Pagination } from '@material-ui/lab';
 import StudentTable from '../components/StudentTable';
+import { selectCityMap } from 'features/city/citySlice';
 
 const useStyle = makeStyles((theme) => ({
   root: {
@@ -36,6 +37,7 @@ export default function ListPage() {
   const pagination = useAppSelector(selectStudentPagination);
   const filter = useAppSelector(selectStudentFilter);
   const loading = useAppSelector(selectStudentLoading);
+  const cityMap = useAppSelector(selectCityMap);
 
   const dispatch = useAppDispatch();
   const classes = useStyle();
@@ -63,7 +65,12 @@ export default function ListPage() {
         </Button>
       </Box>
 
-      <StudentTable studentList={studentList} onEdit={() => {}} onRemove={() => {}}></StudentTable>
+      <StudentTable
+        cityMap={cityMap}
+        studentList={studentList}
+        onEdit={() => {}}
+        onRemove={() => {}}
+      ></StudentTable>
       <Box mt={2} display="flex" justifyContent="center">
         <Pagination
           color="primary"
