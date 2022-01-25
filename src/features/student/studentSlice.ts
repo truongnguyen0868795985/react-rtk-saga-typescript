@@ -1,6 +1,7 @@
 import { ListParams, Student } from 'models';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+import { ListResponse } from './../../../.history/src/models/commons_20220124170306';
 import { RootState } from 'app/store';
 
 interface StudentState {
@@ -31,7 +32,7 @@ const studentSlice = createSlice({
     fetchStudentList(state: StudentState, action: PayloadAction<ListParams>) {
       state.loading = true;
     },
-    fetchStudentListSuccess(state: StudentState, action: PayloadAction<ListParams>) {
+    fetchStudentListSuccess(state: StudentState, action: PayloadAction<ListResponse<Student>>) {
       state.list = action.payload.data;
       state.pagination = action.payload.pagination;
       state.loading = false;

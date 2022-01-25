@@ -1,12 +1,21 @@
-import { Box, Button, Typography, makeStyles } from '@material-ui/core';
+import { Box, Button, LinearProgress, Typography, makeStyles } from '@material-ui/core';
 import React, { useEffect } from 'react';
-import { selectStudentList, studentActions } from '../studentSlice';
+import {
+  selectStudentFilter,
+  selectStudentList,
+  selectStudentLoading,
+  selectStudentPagination,
+  studentActions,
+} from '../studentSlice';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 
+import { Pagination } from '@material-ui/lab';
 import StudentTable from '../components/StudentTable';
 
 const useStyle = makeStyles((theme) => ({
-  root: {},
+  root: {
+    position: 'relative',
+  },
 
   titleContainer: {
     display: 'flex',
@@ -15,26 +24,38 @@ const useStyle = makeStyles((theme) => ({
     alignItems: 'center',
     marginBottom: theme.spacing(4),
   },
+  loading: {
+    position: 'absolute',
+    top: theme.spacing(-1),
+    width: '100%',
+  },
 }));
 
 export default function ListPage() {
-  const dispatch = useAppDispatch();
+  const studentList = useAppSelector(selectStudentList);
+  const pagination = useAppSelector(selectStudentPagination);
+  const filter = useAppSelector(selectStudentFilter);
+  const loading = useAppSelector(selectStudentLoading);
 
+  const dispatch = useAppDispatch();
   const classes = useStyle();
 
-  const studentList = useAppSelector(selectStudentList);
-
-  useEffect(() => {
+  const handlePageChange = (e: any, page: number) => {
     dispatch(
-      studentActions.fetchStudentList({
-        _page: 1,
-        _limit: 15,
+      studentActions.setFilter({
+        ...filter,
+        _page: page,
       })
     );
-  }, [dispatch]);
+  };
+
+  useEffect(() => {
+    dispatch(studentActions.fetchStudentList(filter));
+  }, [dispatch, filter]);
 
   return (
     <Box className={classes.root}>
+      {loading && <LinearProgress className={classes.loading} />}
       <Box className={classes.titleContainer}>
         <Typography variant="h4">Student</Typography>
         <Button variant="contained" color="primary">
@@ -43,6 +64,14 @@ export default function ListPage() {
       </Box>
 
       <StudentTable studentList={studentList} onEdit={() => {}} onRemove={() => {}}></StudentTable>
+      <Box mt={2} display="flex" justifyContent="center">
+        <Pagination
+          color="primary"
+          count={Math.ceil(pagination._totalRows / pagination._limit)}
+          page={pagination?._page}
+          onChange={handlePageChange}
+        />
+      </Box>
     </Box>
   );
 }

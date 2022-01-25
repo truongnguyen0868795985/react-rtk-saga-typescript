@@ -1,4 +1,5 @@
-import { Button, Paper } from '@material-ui/core';
+import { Box, Button, Paper } from '@material-ui/core';
+import { capitalizeString, getMarkColor } from 'utils';
 
 import React from 'react';
 import { Student } from 'models';
@@ -40,23 +41,27 @@ export default function StudentTable({ studentList, onEdit, onRemove }: StudentT
           </TableRow>
         </TableHead>
         <TableBody>
-          {studentList.map((student: Student, idx: number) => (
+          {studentList.map((student: Student) => (
             <TableRow key={student.id}>
-              <TableCell>{idx + 1}</TableCell>
+              <TableCell width={310}>{student.id}</TableCell>
               <TableCell>{student.name}</TableCell>
-              <TableCell>{student.gender}</TableCell>
-              <TableCell>{student.mark}</TableCell>
+              <TableCell>{capitalizeString(student.gender)}</TableCell>
+              <TableCell>
+                <Box color={getMarkColor(student.mark)} fontWeight="bold">
+                  {student.mark}
+                </Box>
+              </TableCell>
               <TableCell>{student.city}</TableCell>
               <TableCell align="right">
                 <Button
                   className={classes.editButton}
-                  variant="outlined"
+                  size="small"
                   color="primary"
                   onClick={() => onEdit?.(student)}
                 >
                   Edit
                 </Button>
-                <Button variant="outlined" color="secondary" onClick={() => onRemove?.(student)}>
+                <Button color="secondary" onClick={() => onRemove?.(student)}>
                   Remove
                 </Button>
               </TableCell>
