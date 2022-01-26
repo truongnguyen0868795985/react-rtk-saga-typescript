@@ -1,7 +1,6 @@
-import { ListParams, Student } from 'models';
+import { ListParams, ListResponse, Student } from 'models';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { ListResponse } from './../../../.history/src/models/commons_20220124170306';
 import { RootState } from 'app/store';
 
 interface StudentState {
@@ -43,6 +42,7 @@ const studentSlice = createSlice({
     setFilter(state: StudentState, action: PayloadAction<ListParams>) {
       state.filter = action.payload;
     },
+    setFilterWithDebounce(state: StudentState, action: PayloadAction<ListParams>) {},
   },
 });
 

@@ -9,7 +9,9 @@ import {
 } from '../studentSlice';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 
+import { ListParams } from 'models';
 import { Pagination } from '@material-ui/lab';
+import StudentFilters from '../components/StudentFilters';
 import StudentTable from '../components/StudentTable';
 import { selectCityMap } from 'features/city/citySlice';
 
@@ -55,6 +57,10 @@ export default function ListPage() {
     dispatch(studentActions.fetchStudentList(filter));
   }, [dispatch, filter]);
 
+  const handleSearchChange = (newFilter: ListParams) => {
+    dispatch(studentActions.setFilterWithDebounce(newFilter));
+  };
+
   return (
     <Box className={classes.root}>
       {loading && <LinearProgress className={classes.loading} />}
@@ -63,6 +69,10 @@ export default function ListPage() {
         <Button variant="contained" color="primary">
           Add new student
         </Button>
+      </Box>
+
+      <Box mb={3}>
+        <StudentFilters filter={filter} cityList={cityMap} onSearchChange={handleSearchChange} />
       </Box>
 
       <StudentTable
