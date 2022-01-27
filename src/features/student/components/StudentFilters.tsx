@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   FormControl,
   Grid,
   InputLabel,
@@ -7,9 +8,9 @@ import {
   OutlinedInput,
   Select,
 } from '@material-ui/core';
+import { ChangeEvent, useRef } from 'react';
 import { City, ListParams } from 'models';
 
-import { ChangeEvent } from 'react';
 import { Search } from '@material-ui/icons';
 
 type Props = {
@@ -20,6 +21,8 @@ type Props = {
 };
 
 export default function StudentFilters({ filter, cityList, onChange, onSearchChange }: Props) {
+  const searchRef = useRef<HTMLInputElement>();
+
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!onSearchChange) return;
     const newFilter = {
@@ -69,10 +72,25 @@ export default function StudentFilters({ filter, cityList, onChange, onSearchCha
     onChange(newFilter);
   };
 
+  const handleClearFilter = () => {
+    if (!onChange) return;
+
+    const newFilter: ListParams = {
+      _page: 1,
+      _limit: 15,
+    };
+
+    onChange(newFilter);
+
+    if (searchRef.current) {
+      searchRef.current.value = '';
+    }
+  };
+
   return (
     <Box>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={3}>
           <FormControl fullWidth variant="outlined" size="small">
             <InputLabel htmlFor="searchByName">Search</InputLabel>
             <OutlinedInput
@@ -80,11 +98,12 @@ export default function StudentFilters({ filter, cityList, onChange, onSearchCha
               label="search"
               endAdornment={<Search />}
               onChange={handleSearchChange}
+              inputRef={searchRef}
             />
           </FormControl>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={3}>
           <FormControl variant="outlined" size="small" fullWidth>
             <InputLabel id="demo-simple-select-outlined-label">Filter by city</InputLabel>
             <Select
@@ -107,7 +126,7 @@ export default function StudentFilters({ filter, cityList, onChange, onSearchCha
           </FormControl>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={3}>
           <FormControl variant="outlined" size="small" fullWidth>
             <InputLabel id="demo-simple-select-outlined-label">Sort</InputLabel>
             <Select
@@ -127,6 +146,12 @@ export default function StudentFilters({ filter, cityList, onChange, onSearchCha
               <MenuItem value="mark.desc">Mark DESC</MenuItem>
             </Select>
           </FormControl>
+        </Grid>
+
+        <Grid item xs={12} md={3}>
+          <Button variant="outlined" color="primary" fullWidth onClick={handleClearFilter}>
+            Clear
+          </Button>
         </Grid>
       </Grid>
     </Box>
