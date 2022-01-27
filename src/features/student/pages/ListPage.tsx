@@ -1,4 +1,5 @@
 import { Box, Button, LinearProgress, Typography, makeStyles } from '@material-ui/core';
+import { ListParams, Student } from 'models';
 import React, { useEffect } from 'react';
 import { selectCityList, selectCityMap } from 'features/city/citySlice';
 import {
@@ -10,10 +11,10 @@ import {
 } from '../studentSlice';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 
-import { ListParams } from 'models';
 import { Pagination } from '@material-ui/lab';
 import StudentFilters from '../components/StudentFilters';
 import StudentTable from '../components/StudentTable';
+import studentApi from 'api/studentApi';
 
 const useStyle = makeStyles((theme) => ({
   root: {
@@ -66,6 +67,15 @@ export default function ListPage() {
     dispatch(studentActions.setFilter(newFilter));
   };
 
+  const handleRemoveStudent = async (student: Student) => {
+    console.log('Remove student', student);
+    try {
+      await studentApi.remove(student?.id || '');
+      const newFilter = { ...filter };
+      dispatch(studentActions.setFilter(newFilter));
+    } catch (error) {}
+  };
+
   return (
     <Box className={classes.root}>
       {loading && <LinearProgress className={classes.loading} />}
@@ -89,7 +99,7 @@ export default function ListPage() {
         cityMap={cityMap}
         studentList={studentList}
         onEdit={() => {}}
-        onRemove={() => {}}
+        onRemove={handleRemoveStudent}
       ></StudentTable>
       <Box mt={2} display="flex" justifyContent="center">
         <Pagination

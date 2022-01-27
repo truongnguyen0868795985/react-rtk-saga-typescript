@@ -23,7 +23,7 @@ const studentApi = {
     return axiosClient.patch(url, data);
   },
 
-  remove(id: String): Promise<ListResponse<City>> {
+  remove(id: String): Promise<ListResponse<Student>> {
     const url = `/students/${id}`;
     return axiosClient.delete(url);
   },
