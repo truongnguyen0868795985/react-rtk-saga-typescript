@@ -1,4 +1,5 @@
 import { Box, Button, LinearProgress, Typography, makeStyles } from '@material-ui/core';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import { ListParams, Student } from 'models';
 import React, { useEffect } from 'react';
 import { selectCityList, selectCityMap } from 'features/city/citySlice';
@@ -36,6 +37,9 @@ const useStyle = makeStyles((theme) => ({
 }));
 
 export default function ListPage() {
+  const match = useRouteMatch();
+  const history = useHistory();
+
   const studentList = useAppSelector(selectStudentList);
   const pagination = useAppSelector(selectStudentPagination);
   const filter = useAppSelector(selectStudentFilter);
@@ -76,14 +80,20 @@ export default function ListPage() {
     } catch (error) {}
   };
 
+  const handleEditStudent = (student: Student) => {
+    history.push(`${match.url}/${student.id}`);
+  };
+
   return (
     <Box className={classes.root}>
       {loading && <LinearProgress className={classes.loading} />}
       <Box className={classes.titleContainer}>
         <Typography variant="h4">Student</Typography>
-        <Button variant="contained" color="primary">
-          Add new student
-        </Button>
+        <Link to={`${match.url}/add`} style={{ textDecoration: 'none' }}>
+          <Button variant="contained" color="primary">
+            Add new student
+          </Button>
+        </Link>
       </Box>
 
       <Box mb={3}>
@@ -98,7 +108,7 @@ export default function ListPage() {
       <StudentTable
         cityMap={cityMap}
         studentList={studentList}
-        onEdit={() => {}}
+        onEdit={handleEditStudent}
         onRemove={handleRemoveStudent}
       ></StudentTable>
       <Box mt={2} display="flex" justifyContent="center">

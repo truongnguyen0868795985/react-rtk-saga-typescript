@@ -25,7 +25,7 @@ export default function StudentFeature({}: Props): ReactElement {
         <Route path={`${match.path}/add`}>
           <AddEdit />
         </Route>
-        <Route path={`${match.path}/:userId`}>
+        <Route path={`${match.path}/:studentId`}>
           <AddEdit />
         </Route>
       </Switch>
